@@ -45,7 +45,10 @@ $instagramActions = new InstagramActions($instagramAuth);
 */
 if(isset($arguments['setLike']) && isset($arguments['mediaId']))
 {
-	var_dump($instagramActions->setLike($arguments['mediaId']));
+	$action = $instagramActions->setLike($arguments['mediaId']);
+	echo json_encode([
+		'action' => 'setLike', 'argument' => $arguments['mediaId'], 'status' => $action
+	]);
 }
 
 /**
@@ -53,7 +56,10 @@ if(isset($arguments['setLike']) && isset($arguments['mediaId']))
 */
 if(isset($arguments['setComment']) && isset($arguments['mediaId']) && isset($arguments['commentText']))
 {
-	var_dump($instagramActions->setComment($arguments['mediaId'], $arguments['commentText']));
+	$action = $instagramActions->setComment($arguments['mediaId'], $arguments['commentText']);
+	echo json_encode([
+		'action' => 'setComment', 'argument' => $arguments['mediaId'], 'status' => $action
+	]);
 }
 
 /**
@@ -61,7 +67,10 @@ if(isset($arguments['setComment']) && isset($arguments['mediaId']) && isset($arg
 */
 if(isset($arguments['setFollow']) && isset($arguments['userId']))
 {
-	var_dump($instagramActions->setFollow($arguments['userId']));
+	$action = $instagramActions->setFollow($arguments['userId']);
+	echo json_encode([
+		'action' => 'setFollow', 'argument' => $arguments['userId'], 'status' => $action
+	]);
 }
 
 /**
@@ -69,5 +78,8 @@ if(isset($arguments['setFollow']) && isset($arguments['userId']))
 */
 if(isset($arguments['unsetFollow']) && isset($arguments['userId']))
 {
-	var_dump($instagramActions->unsetFollow($arguments['userId']));
+	$action = $instagramActions->unsetFollow($arguments['userId']);
+	echo json_encode([
+		'action' => 'unsetFollow', 'argument' => $arguments['userId'], 'status' => $action
+	]);	
 }
