@@ -13,10 +13,10 @@ require_once 'classes/InstagramAuth.php';
 require_once 'classes/InstagramActions.php';
 
 $arguments = getopt('', [
-	'username:', 
-	'password:', 
-	'mediaId::', 
-	'userId::', 
+	'username:',
+	'password:',
+	'mediaId::',
+	'userId::',
 	'commentText::',
 	'setLike::',
 	'setFollow::',
@@ -54,7 +54,7 @@ if(isset($arguments['setLike']) && isset($arguments['mediaId']))
 /**
 * Set comment
 */
-if(isset($arguments['setComment']) && isset($arguments['mediaId']) && isset($arguments['commentText']))
+else if(isset($arguments['setComment']) && isset($arguments['mediaId']) && isset($arguments['commentText']))
 {
 	$action = $instagramActions->setComment($arguments['mediaId'], $arguments['commentText']);
 	echo json_encode([
@@ -65,7 +65,7 @@ if(isset($arguments['setComment']) && isset($arguments['mediaId']) && isset($arg
 /**
 * Set follow
 */
-if(isset($arguments['setFollow']) && isset($arguments['userId']))
+else if(isset($arguments['setFollow']) && isset($arguments['userId']))
 {
 	$action = $instagramActions->setFollow($arguments['userId']);
 	echo json_encode([
@@ -76,10 +76,15 @@ if(isset($arguments['setFollow']) && isset($arguments['userId']))
 /**
 * Unset follow
 */
-if(isset($arguments['unsetFollow']) && isset($arguments['userId']))
+else if(isset($arguments['unsetFollow']) && isset($arguments['userId']))
 {
 	$action = $instagramActions->unsetFollow($arguments['userId']);
 	echo json_encode([
 		'action' => 'unsetFollow', 'argument' => $arguments['userId'], 'status' => $action
 	]);	
+}
+
+else
+{
+	echo json_encode(['status' => true]);
 }
