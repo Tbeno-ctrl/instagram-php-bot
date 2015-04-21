@@ -3,7 +3,7 @@
 class Instagram {
 	const loginPage = 'https://instagram.com/accounts/login/';
 	const loginAjax = 'https://instagram.com/accounts/login/ajax/';
-	private static $defaultHeaders = [
+	private $_defaultHeaders = [
 		'Origin' => 'https://instagram.com',
 		'Accept-Encoding' => 'gzip, deflate',
 		'Accept-Language' => 'en-US,en;q=0.8,ru;q=0.6,pl;q=0.4',
@@ -35,12 +35,28 @@ class Instagram {
 
 	public function resetHeaders()
 	{
-		$this->_headers = self::$defaultHeaders;
+		$this->_headers = $this->_defaultHeaders;
 	}
 
 	public function getHeaders()
 	{
 		return $this->_headers;
+	}
+
+	public function setIp($ip)
+	{
+		if($ip)
+		{
+			$this->_headers['X-Forwarded-For'] = $ip;
+		}
+	}
+
+	public function setUserAgent($userAgent)
+	{
+		if($userAgent)
+		{
+			$this->_headers['User-Agent'] = $userAgent;
+		}
 	}
 
 	public function setCookies(GuzzleHttp\Cookie\CookieJar $jar)

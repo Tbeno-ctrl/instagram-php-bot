@@ -13,15 +13,18 @@ require_once 'classes/InstagramAuth.php';
 require_once 'classes/InstagramActions.php';
 
 $arguments = getopt('', [
-	'username:',
-	'password:',
-	'mediaId::',
-	'userId::',
+	'username:', 
+	'password:', 
+	'mediaId::', 
+	'userId::', 
 	'commentText::',
 	'setLike::',
 	'setFollow::',
 	'unsetFollow::',
-	'setComment::'
+	'setComment::',
+
+	'ip::',
+	'userAgent::'
 ]);
 
 /**
@@ -32,11 +35,16 @@ if(!isset($arguments['username']) || !isset($arguments['password']))
 	throw new Exception('--username and --password parameters are obligatory');
 }
 
-$instagramAuth = new InstagramAuth($arguments['username'], $arguments['password']);
+$ip = (isset($arguments['ip'])) ? $arguments['ip'] : null;
+$userAgent = (isset($arguments['userAgent'])) ? $arguments['userAgent'] : null;
+
+$instagramAuth = new InstagramAuth($arguments['username'], $arguments['password'], $ip, $userAgent);
 
 if(!$instagramAuth->check())
 {
-	throw new Exception('User not logged in');
+	die(json_encode([
+		'author' => $arguments['username'], 'action' => 'login', 'status' => false
+	]));
 }
 $instagramActions = new InstagramActions($instagramAuth);
 
@@ -47,7 +55,7 @@ if(isset($arguments['setLike']) && isset($arguments['mediaId']))
 {
 	$action = $instagramActions->setLike($arguments['mediaId']);
 	echo json_encode([
-		'action' => 'setLike', 'argument' => $arguments['mediaId'], 'status' => $action
+		'author' => $arguments['username'], 'action' => 'setLike', 'argument' => $arguments['mediaId'], 'status' => $action
 	]);
 }
 
@@ -58,7 +66,7 @@ else if(isset($arguments['setComment']) && isset($arguments['mediaId']) && isset
 {
 	$action = $instagramActions->setComment($arguments['mediaId'], $arguments['commentText']);
 	echo json_encode([
-		'action' => 'setComment', 'argument' => $arguments['mediaId'], 'status' => $action
+		'author' => $arguments['username'], 'action' => 'setComment', 'argument' => $arguments['mediaId'], 'status' => $action
 	]);
 }
 
@@ -69,7 +77,7 @@ else if(isset($arguments['setFollow']) && isset($arguments['userId']))
 {
 	$action = $instagramActions->setFollow($arguments['userId']);
 	echo json_encode([
-		'action' => 'setFollow', 'argument' => $arguments['userId'], 'status' => $action
+		'author' => $arguments['username'], 'action' => 'setFollow', 'argument' => $arguments['userId'], 'status' => $action
 	]);
 }
 
@@ -80,11 +88,13 @@ else if(isset($arguments['unsetFollow']) && isset($arguments['userId']))
 {
 	$action = $instagramActions->unsetFollow($arguments['userId']);
 	echo json_encode([
-		'action' => 'unsetFollow', 'argument' => $arguments['userId'], 'status' => $action
+		'author' => $arguments['username'], 'action' => 'unsetFollow', 'argument' => $arguments['userId'], 'status' => $action
 	]);	
 }
 
-else
+else 
 {
-	echo json_encode(['status' => true]);
+	die(json_encode([
+		'author' => $arguments['username'], 'action' => 'login', 'status' => true
+	]));
 }

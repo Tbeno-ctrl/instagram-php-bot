@@ -5,9 +5,12 @@ class InstagramAuth extends Instagram {
 	private $_password;
 	private $_client;
 
-	public function __construct($username, $password)
+	public function __construct($username, $password, $ip = '45.55.190.245', $userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36')
 	{
 		parent::__construct();
+		$this->setIp($ip);
+		$this->setUserAgent($userAgent);
+
 		$this->_username = $username;
 		$this->_password = $password;
 		$this->_client = new GuzzleHttp\Client();
@@ -54,8 +57,7 @@ class InstagramAuth extends Instagram {
 			throw new Exception("Error Processing Request");
 		}
 
-		$csrftoken = $this->findCookie('csrftoken');
-		if(!$csrftoken)
+		if(!$this->findCookie('csrftoken'))
 		{
 			throw new Exception("Error Fetching CSRFToken");
 		}
@@ -64,7 +66,7 @@ class InstagramAuth extends Instagram {
 		    'cookies' => $cookies,
 		    'headers' => array_merge($this->getHeaders(), [
 				'X-Instagram-AJAX' => '1',
-				'X-CSRFToken' => $csrftoken,
+				'X-CSRFToken' => $this->findCookie('csrftoken'),
 				'X-Requested-With' => 'XMLHttpRequest'
 			]),
 			'body' => [
