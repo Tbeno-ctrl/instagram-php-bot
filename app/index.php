@@ -1,12 +1,4 @@
 <?php 
-use GuzzleHttp\Client;
-use Symfony\Component\DomCrawler\Crawler;
-
-ini_set('display_errors',1);
-ini_set('display_startup_errors',1);
-error_reporting(-1);
-
-//autoloader
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $arguments = getopt('', [
@@ -23,8 +15,6 @@ $arguments = getopt('', [
 	'ip::',
 	'userAgent::'
 ]);
-
-$instagramAuth = new InstagramBot\InstagramAuth(123, 123);
 
 /**
 * Authorize first
