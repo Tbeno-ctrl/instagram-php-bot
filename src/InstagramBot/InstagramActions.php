@@ -1,4 +1,5 @@
 <?php 
+namespace InstagramBot;
 
 class InstagramActions {
 	private $_auth;

@@ -1,4 +1,5 @@
 <?php
+namespace InstagramBot;
 
 class Instagram {
 	const loginPage = 'https://instagram.com/accounts/login/';
@@ -11,7 +12,7 @@ class Instagram {
 		'Content-Type' => 'application/x-www-form-urlencoded',
 		'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
 		'Cache-Control' => 'max-age=0',
-		'Referer' => 'https://instagram.com/accounts/login/?force_classic_login=&next=/oauth/authorize%3Fclient_id%3Dd9494686198d4dfeb954979a3e270e5e%26redirect_uri%3Dhttp%253A%252F%252Ficonosquare.,com%26response_type%3Dcode%26scope%3Dlikes%2Bcomments%2Brelationships',
+		'Referer' => 'https://instagram.com/accounts/login/',
 		'Connection' => 'keep-alive'
 	];
 	private $_headers;
@@ -19,7 +20,7 @@ class Instagram {
 
 	public function __construct()
 	{
-		$this->_cookies = new GuzzleHttp\Cookie\CookieJar();
+		$this->_cookies = new \GuzzleHttp\Cookie\CookieJar();
 		$this->resetHeaders();
 	}
 

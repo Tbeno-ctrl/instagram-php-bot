@@ -1,4 +1,5 @@
 <?php 
+namespace InstagramBot;
 
 class InstagramAuth extends Instagram {
 	private $_username;
@@ -13,7 +14,7 @@ class InstagramAuth extends Instagram {
 
 		$this->_username = $username;
 		$this->_password = $password;
-		$this->_client = new GuzzleHttp\Client();
+		$this->_client = new \GuzzleHttp\Client();
 
 		$this->run();
 	}
