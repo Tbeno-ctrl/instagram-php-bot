@@ -6,7 +6,7 @@ class InstagramAuth extends Instagram {
 	private $_password;
 	private $_client;
 
-	public function __construct($username, $password, $ip = '45.55.190.245', $userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36')
+	public function __construct($username, $password, $cookies = false, $ip = '45.55.190.245', $userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36')
 	{
 		parent::__construct();
 		$this->setIp($ip);
@@ -63,18 +63,25 @@ class InstagramAuth extends Instagram {
 			throw new Exception("Error Fetching CSRFToken");
 		}
 
-		$response = $this->_client->post(self::loginAjax, [
-		    'cookies' => $cookies,
-		    'headers' => array_merge($this->getHeaders(), [
-				'X-Instagram-AJAX' => '1',
-				'X-CSRFToken' => $this->findCookie('csrftoken'),
-				'X-Requested-With' => 'XMLHttpRequest'
-			]),
-			'body' => [
-				'username' => $this->getUsername(),
-				'password' => $this->getPassword()
-			]
-		]);
+		try 
+		{
+			$response = $this->_client->post(self::loginAjax, [
+			    'cookies' => $cookies,
+			    'headers' => array_merge($this->getHeaders(), [
+					'X-Instagram-AJAX' => '1',
+					'X-CSRFToken' => $this->findCookie('csrftoken'),
+					'X-Requested-With' => 'XMLHttpRequest'
+				]),
+				'body' => [
+					'username' => $this->getUsername(),
+					'password' => $this->getPassword()
+				]
+			]);
+		}
+		catch (Exception $e)
+		{
+			throw new Exception("Error Processing Request");
+		}
 
 		if($response->getStatusCode() != 200 || !$response->json())
 		{

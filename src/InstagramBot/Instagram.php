@@ -60,7 +60,7 @@ class Instagram {
 		}
 	}
 
-	public function setCookies(GuzzleHttp\Cookie\CookieJar $jar)
+	public function setCookies(\GuzzleHttp\Cookie\CookieJar $jar)
 	{
 		$this->_cookies = $jar;
 	}
