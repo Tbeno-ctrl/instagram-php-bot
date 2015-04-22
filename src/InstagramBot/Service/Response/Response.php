@@ -9,10 +9,9 @@ class Response implements ResponseInterface {
 
 	protected $dispatcher;
 	protected $action;
-	protected $cookies;
 	protected $response;
 
-	public function __construct(Dispatcher $dispatcher, Cookies $cookies, $action, $status)
+	public function __construct(Dispatcher $dispatcher, $action, $status)
 	{
 		$this->dispatcher = $dispatcher;
 		$this->action = $action;
@@ -20,7 +19,6 @@ class Response implements ResponseInterface {
 			'action' => $this->action,
 			'username' => $this->dispatcher->argument('username'),
 			'status' => (bool) $status,
-			'cookies' => $cookies->all(),
 			'action' => $action
 		];
 

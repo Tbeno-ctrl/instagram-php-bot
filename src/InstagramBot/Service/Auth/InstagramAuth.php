@@ -24,6 +24,11 @@ class InstagramAuth implements AuthInterface {
 
 	public function login($username, $password)
 	{
+		if($this->check())
+		{
+			return true;
+		}
+
 		$response = $this->client->get(self::$loginPage, [
 			'cookies' => $this->cookies->toObject(),
 			'headers' => $this->headers->all()
