@@ -23,39 +23,65 @@ class InstagramAction implements ActionInterface {
 		$this->cookies = $cookies;
 		$this->headers = $headers;
 		$this->auth = $auth;
+
+		//adjusting for ajax requests
+		$this->headers->set([
+			'X-Instagram-AJAX' => '1',
+			'X-Requested-With' => 'XMLHttpRequest'
+		]);
 	}
 
 	public function setLike($mediaId)
 	{
-		var_dump($this->cookies->all());
-		die();
-
 		$response = $this->client->post("https://instagram.com/web/likes/{$mediaId}/like/", [
 			'cookies' => $this->cookies->toObject(),
 			'headers' => $this->headers->all()
 		]);
 
-		$this->checkResponse($response);
+		return $this->checkResponse($response);
 	}
 
 	public function setComment($mediaId, $commentText)
 	{
+		$response = $this->client->post("https://instagram.com/web/comments/{$mediaId}/add/", [
+			'cookies' => $this->cookies->toObject(),
+			'headers' => $this->headers->all(),
+			'body' => [
+				'comment_text' => $commentText
+			]
+		]);
 
+		return $this->checkResponse($response);
 	}
 
 	public function setFollow($userId)
 	{
+		$response = $this->client->post("https://instagram.com/web/friendships/{$userId}/follow/", [
+			'cookies' => $this->cookies->toObject(),
+			'headers' => $this->headers->all()
+		]);
 
+		return $this->checkResponse($response);
 	}
 
 	public function unsetFollow($userId)
 	{
+		$response = $this->client->post("https://instagram.com/web/friendships/{$userId}/unfollow/", [
+			'cookies' => $this->cookies->toObject(),
+			'headers' => $this->headers->all()
+		]);
 
+		return $this->checkResponse($response);
 	}
 
 	private function checkResponse($response)
 	{
-		$response = $response->getStatusCode();
+		if($response->getStatusCode() != 200)
+		{
+			throw new \Exception("Error handling request : " . debug_backtrace()[1]['function']);
+		}
+
+		$response = $response->json();
 
 		if(!isset($response['status']))
 		{

@@ -7,20 +7,15 @@ interface HeadersInterface {
 	/**
 	*
 	*/
-	public function get();
+	public function get($name);
 
 	/**
 	*
 	*/
-	public function set();
+	public function set(Array $headers);
 
 	/**
 	*
 	*/
 	public function all();
-
-	/**
-	*
-	*/
-	public function build();
 }

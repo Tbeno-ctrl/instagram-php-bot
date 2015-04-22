@@ -10,23 +10,25 @@ class Headers implements HeadersInterface {
 		$this->headers = $headers;
 	}
 
-	public function get()
+	public function get($name)
 	{
-
+		if(isset($this->headers[$name]))
+		{
+			return ;$this->headers[$name];
+		}
+		else
+		{
+			return false;
+		}
 	}
 
-	public function set()
+	public function set(Array $headers)
 	{
-		
+		$this->headers = array_merge($this->headers, $headers);
 	}
 
 	public function all()
 	{
 		return $this->headers;
-	}
-
-	public function build()
-	{
-		
 	}
 }

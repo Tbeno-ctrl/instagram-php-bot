@@ -61,6 +61,10 @@ class InstagramAuth implements AuthInterface {
 
 		if(isset($response->json()['authenticated']) && $response->json()['authenticated'])
 		{
+			$this->headers->set([
+				'X-CSRFToken' => $this->cookies->get('csrftoken')
+			]);
+
 			return true;
 		}
 		else 

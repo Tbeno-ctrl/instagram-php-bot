@@ -23,9 +23,4 @@ interface CookiesInterface {
 	*
 	*/
 	public function all();
-
-	/**
-	*
-	*/
-	public function build();
 }

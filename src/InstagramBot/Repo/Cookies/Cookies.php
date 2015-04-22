@@ -37,9 +37,4 @@ class Cookies Implements CookiesInterface {
 	{
 		return $this->cookies->toArray();
 	}
-
-	public function build()
-	{
-		
-	}
 }
