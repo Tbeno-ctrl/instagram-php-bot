@@ -5,7 +5,6 @@ ini_set('display_errors',1);
 ini_set('display_startup_errors',1);
 error_reporting(-1);
 
-$cookies = new GuzzleHttp\Cookie\CookieJar;
 $headers = [
 	'Origin' => 'https://instagram.com',
 	'Accept-Encoding' => 'gzip, deflate',
@@ -17,15 +16,6 @@ $headers = [
 	'Referer' => 'https://instagram.com/accounts/login/',
 	'Connection' => 'keep-alive'
 ];
-
-$client = new GuzzleHttp\Client;
-$cookies = new InstagramBot\Repo\Cookies\Cookies($cookies);
-$headers = new InstagramBot\Repo\Headers\Headers($headers);
-
-$auth = new InstagramBot\Service\Auth\InstagramAuth($client, $cookies, $headers);
-// $auth->login('evointeractive', 'success2017');
-
-// $action = new InstagramBot\Service\Action\InstagramAction($client, $cookies, $headers, $auth);
 
 $arguments = getopt('', [
 	'username:', 
@@ -41,24 +31,54 @@ $arguments = getopt('', [
 	'userAgent::'
 ]);
 
+$client = new GuzzleHttp\Client;
+$cookies = new GuzzleHttp\Cookie\CookieJar;
+$cookies = new InstagramBot\Repo\Cookies\Cookies($cookies);
+$headers = new InstagramBot\Repo\Headers\Headers($headers);
 $dispatcher = new InstagramBot\Service\Dispatcher\Dispatcher($arguments);
+
+if($dispatcher->login())
+{
+	$auth = new InstagramBot\Service\Auth\InstagramAuth($client, $cookies, $headers);
+	$auth->login($dispatcher->argument('username'), $dispatcher->argument('password'));
+	$action = new InstagramBot\Service\Action\InstagramAction($client, $cookies, $headers, $auth);
+}
+else
+{
+	throw new Exception("username / password is not provided");
+}
 
 if($dispatcher->setComment())
 {
-	var_dump($action->setComment($dispatcher->argument('mediaId'), $dispatcher->argument('commentText')));
+	$status = $action->setComment($dispatcher->argument('mediaId'), $dispatcher->argument('commentText'));
+	$action = 'setComment';
 }
 
-if($dispatcher->setLike())
+else if($dispatcher->setLike())
 {
-	var_dump($action->setLike($dispatcher->argument('mediaId')));
+	$status = $action->setLike($dispatcher->argument('mediaId'));
+	$action = 'setLike';
 }
 
-if($dispatcher->setFollow())
+else if($dispatcher->setFollow())
 {
-	var_dump($action->setFollow($dispatcher->argument('userId')));
+	$status = $action->setFollow($dispatcher->argument('userId'));
+	$action = 'setFollow';
 }
 
-if($dispatcher->unsetFollow())
+else if($dispatcher->unsetFollow())
 {
-	var_dump($action->unsetFollow($dispatcher->argument('userId')));
+	$status = $action->unsetFollow($dispatcher->argument('userId'));
+	$action = 'unsetFollow';
+}
+
+else
+{
+	$status = true;
+	$action = 'login';
+}
+
+if(isset($status) && isset($action))
+{
+	echo new InstagramBot\Service\Response\Response($dispatcher, $cookies, $action, $status);
 }

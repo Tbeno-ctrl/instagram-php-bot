@@ -9,8 +9,6 @@ class Dispatcher implements DispatcherInterface {
 	public function __construct(Array $arguments)
 	{
 		$this->arguments = $arguments;
-
-		var_dump($arguments);
 	}
 
 	public function argument($name)
@@ -39,7 +37,7 @@ class Dispatcher implements DispatcherInterface {
 
 	public function setLike()
 	{
-		if(!$this->login)
+		if(!$this->login())
 		{
 			return false;
 		}
@@ -56,7 +54,7 @@ class Dispatcher implements DispatcherInterface {
 
 	public function setComment()
 	{
-		if(!$this->login)
+		if(!$this->login())
 		{
 			return false;
 		}
@@ -73,7 +71,7 @@ class Dispatcher implements DispatcherInterface {
 
 	public function setFollow()
 	{
-		if(!$this->login)
+		if(!$this->login())
 		{
 			return false;
 		}
@@ -90,7 +88,7 @@ class Dispatcher implements DispatcherInterface {
 
 	public function unsetFollow()
 	{
-		if(!$this->login)
+		if(!$this->login())
 		{
 			return false;
 		}
