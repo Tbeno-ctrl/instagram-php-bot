@@ -66,7 +66,7 @@ class Response implements ResponseInterface {
 	{
 		if(method_exists($this, $this->action))
 		{
-			return array_merge($this->response);
+			return array_merge($this->response, $this->{$this->action}());
 		}
 		else
 		{
