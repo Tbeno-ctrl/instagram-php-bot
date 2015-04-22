@@ -19,7 +19,8 @@ $cookies = new InstagramBot\Repo\Cookies\Cookies($cookies);
 $headers = new InstagramBot\Repo\Headers\Headers($headers);
 
 $auth = new InstagramBot\Service\Auth\InstagramAuth($client, $cookies, $headers);
-$auth->login('hamburgersauce1', 'hamburgersauce2');
+$auth->login('evointeractive', 'success2017');
 
-$action = new InstagramBot\Service\Action\InstagramAction($client, $cookies, $auth);
+$action = new InstagramBot\Service\Action\InstagramAction($client, $cookies, $headers, $auth);
+var_dump($action->setLike('968837485455519398'));
 die;

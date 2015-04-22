@@ -5,31 +5,37 @@ namespace InstagramBot\Service\Action;
 use GuzzleHttp\Client;
 use InstagramBot\Service\Auth\InstagramAuth;
 use InstagramBot\Repo\Cookies\Cookies;
+use InstagramBot\Repo\Headers\Headers;
 
 class InstagramAction implements ActionInterface {
 	protected $client;
 	protected $cookies;
 	protected $auth;
 
-	public function __construct(Client $client, Cookies $cookies, InstagramAuth $auth)
+	public function __construct(Client $client, Cookies $cookies, Headers $headers, InstagramAuth $auth)
 	{
 		if(!$auth->check())
 		{
 			throw new \Exception("User is not authorized");
 		}
 
-		$this->auth = $auth;
+		$this->client = $client;
 		$this->cookies = $cookies;
+		$this->headers = $headers;
+		$this->auth = $auth;
 	}
 
 	public function setLike($mediaId)
 	{
-		$response = $this->_auth->getClient()->post('https://instagram.com/web/likes/' . $mediaId . '/like/', [
+		var_dump($this->cookies->all());
+		die();
+
+		$response = $this->client->post("https://instagram.com/web/likes/{$mediaId}/like/", [
 			'cookies' => $this->cookies->toObject(),
 			'headers' => $this->headers->all()
 		]);
 
-		return $this->_checkResponse($response->json());
+		$this->checkResponse($response);
 	}
 
 	public function setComment($mediaId, $commentText)
@@ -49,9 +55,11 @@ class InstagramAction implements ActionInterface {
 
 	private function checkResponse($response)
 	{
+		$response = $response->getStatusCode();
+
 		if(!isset($response['status']))
 		{
-			throw new Exception("Error handling request :" . debug_backtrace()[1]['function']);
+			throw new \Exception("Error handling request : " . debug_backtrace()[1]['function']);
 		}
 
 		if($response['status'] == 'ok')
