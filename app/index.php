@@ -35,14 +35,7 @@ $dispatcher = new InstagramBot\Service\Dispatcher\Dispatcher($arguments);
 
 $storageFile = __DIR__ . "/../storage/{$dispatcher->argument('username')}.txt";
 
-if(file_exists($storageFile))
-{
-	$cookies = new GuzzleHttp\Cookie\CookieJar(false, json_decode(file_get_contents($storageFile), true));
-}
-else
-{
-	$cookies = new GuzzleHttp\Cookie\CookieJar;
-}
+$cookies = new GuzzleHttp\Cookie\FileCookieJar($storageFile);
 
 $client = new GuzzleHttp\Client;
 $cookies = new InstagramBot\Repo\Cookies\Cookies($cookies);
@@ -92,7 +85,4 @@ else
 if(isset($status) && isset($action))
 {
 	echo new InstagramBot\Service\Response\Response($dispatcher, $action, $status);
-	$fh = fopen($storageFile, 'w') or die("can't open file");
-	fwrite($fh, json_encode($cookies->all()));
-	fclose($fh);
 }

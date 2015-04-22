@@ -26,55 +26,61 @@ class InstagramAuth implements AuthInterface {
 	{
 		if($this->check())
 		{
-			return true;
-		}
-
-		$response = $this->client->get(self::$loginPage, [
-			'cookies' => $this->cookies->toObject(),
-			'headers' => $this->headers->all()
-		]);
-
-		if($response->getStatusCode() != 200)
-		{
-			throw new \Exception("Error sending initial request to instagram");
-		}
-
-		if(!$this->cookies->get('csrftoken'))
-		{
-			throw new \Exception("Csrf token has not been found");
-		}
-
-		$headers = array_merge($this->headers->all(), [
-			'X-CSRFToken' => $this->cookies->get('csrftoken'),
-			'X-Instagram-AJAX' => '1',
-			'X-Requested-With' => 'XMLHttpRequest'
-		]);
-
-		$response = $this->client->post(self::$loginAjax, [
-		    'cookies' => $this->cookies->toObject(),
-		    'headers' => $headers,
-			'body' => [
-				'username' => $username,
-				'password' => $password
-			]
-		]);
-
-		if($response->getStatusCode() != 200)
-		{
-			throw new \Exception("Error sending authentication request to instagram");
-		}
-
-		if(isset($response->json()['authenticated']) && $response->json()['authenticated'])
-		{
 			$this->headers->set([
 				'X-CSRFToken' => $this->cookies->get('csrftoken')
 			]);
 
 			return true;
 		}
-		else 
+		else
 		{
-			return false;
+			$response = $this->client->get(self::$loginPage, [
+				'cookies' => $this->cookies->toObject(),
+				'headers' => $this->headers->all()
+			]);
+
+			if($response->getStatusCode() != 200)
+			{
+				throw new \Exception("Error sending initial request to instagram");
+			}
+
+			if(!$this->cookies->get('csrftoken'))
+			{
+				throw new \Exception("Csrf token has not been found");
+			}
+
+			$headers = array_merge($this->headers->all(), [
+				'X-CSRFToken' => $this->cookies->get('csrftoken'),
+				'X-Instagram-AJAX' => '1',
+				'X-Requested-With' => 'XMLHttpRequest'
+			]);
+
+			$response = $this->client->post(self::$loginAjax, [
+			    'cookies' => $this->cookies->toObject(),
+			    'headers' => $headers,
+				'body' => [
+					'username' => $username,
+					'password' => $password
+				]
+			]);
+
+			if($response->getStatusCode() != 200)
+			{
+				throw new \Exception("Error sending authentication request to instagram");
+			}
+
+			if(isset($response->json()['authenticated']) && $response->json()['authenticated'])
+			{
+				$this->headers->set([
+					'X-CSRFToken' => $this->cookies->get('csrftoken')
+				]);
+
+				return true;
+			}
+			else 
+			{
+				return false;
+			}
 		}
 	}
 
