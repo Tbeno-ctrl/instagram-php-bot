@@ -27,15 +27,24 @@ $arguments = getopt('', [
 	'setFollow::',
 	'unsetFollow::',
 	'setComment::',
+	'cookies::',
 	'ip::',
 	'userAgent::'
 ]);
+$dispatcher = new InstagramBot\Service\Dispatcher\Dispatcher($arguments);
+
+if($dispatcher->argument('cookies'))
+{
+	$cookies = new GuzzleHttp\Cookie\CookieJar(false, json_decode($dispatcher->argument('cookies')));
+}
+else
+{
+	$cookies = new GuzzleHttp\Cookie\CookieJar;
+}
 
 $client = new GuzzleHttp\Client;
-$cookies = new GuzzleHttp\Cookie\CookieJar;
 $cookies = new InstagramBot\Repo\Cookies\Cookies($cookies);
 $headers = new InstagramBot\Repo\Headers\Headers($headers);
-$dispatcher = new InstagramBot\Service\Dispatcher\Dispatcher($arguments);
 
 if($dispatcher->login())
 {
