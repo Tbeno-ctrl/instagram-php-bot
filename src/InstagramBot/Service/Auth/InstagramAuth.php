@@ -81,6 +81,6 @@ class InstagramAuth implements AuthInterface {
 
 	public function details()
 	{
-		
+
 	}
 }
