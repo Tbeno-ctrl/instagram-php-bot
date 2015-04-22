@@ -5,8 +5,9 @@ class InstagramAuth extends Instagram {
 	private $_username;
 	private $_password;
 	private $_client;
+	private $_cookies;
 
-	public function __construct($username, $password, $cookies = false, $ip = '45.55.190.245', $userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36')
+	public function __construct($username, $password, $cookies = [], $ip = '45.55.190.245', $userAgent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36')
 	{
 		parent::__construct();
 		$this->setIp($ip);
@@ -16,7 +17,14 @@ class InstagramAuth extends Instagram {
 		$this->_password = $password;
 		$this->_client = new \GuzzleHttp\Client();
 
-		$this->run();
+		if($cookies)
+		{
+			$this->setCookies($cookies);
+		}
+		else
+		{
+			$this->run();
+		}
 	}
 
 	public function getUsername()
