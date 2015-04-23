@@ -35,6 +35,12 @@ $dispatcher = new InstagramBot\Service\Dispatcher\Dispatcher($arguments);
 
 $storageFile = __DIR__ . "/../storage/{$dispatcher->argument('username')}.txt";
 
+//remove cookies file if update date > 1 hour
+if((time() - filectime($storageFile)) > 60 * 60) 
+{
+	unlink($storageFile);
+}
+
 $cookies = new GuzzleHttp\Cookie\FileCookieJar($storageFile);
 
 $client = new GuzzleHttp\Client;
