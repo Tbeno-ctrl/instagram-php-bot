@@ -51,8 +51,7 @@ $responses = new InstagramBot\Repo\Responses\Responses;
 $response = new InstagramBot\Service\Response\Response($dispatcher, $responses);
 
 $responses->set([
-	'username' => $dispatcher->argument('username'),
-	'mediaId' => $dispatcher->argument('mediaId')
+	'username' => $dispatcher->argument('username')
 ]);
 
 if($dispatcher->login())
@@ -76,11 +75,13 @@ if($dispatcher->setComment())
 		$status = $action->setComment($dispatcher->argument('mediaId'), $dispatcher->argument('commentText'));
 		$responses->set([
 			'status' => true,
+			'mediaId' => $dispatcher->argument('mediaId')
 			'action' => 'setComment'
 		]);
 	} catch (Exception $e) {
 		$responses->set([
 			'status' => false,
+			'mediaId' => $dispatcher->argument('mediaId')
 			'action' => 'setComment',
 			'error' => $e->getMessage()
 		]);
@@ -94,11 +95,13 @@ else if($dispatcher->setLike())
 		$status = $action->setLike($dispatcher->argument('mediaId'));
 		$responses->set([
 			'status' => true,
+			'mediaId' => $dispatcher->argument('mediaId')
 			'action' => 'setLike'
 		]);
 	} catch (Exception $e) {
 		$responses->set([
 			'status' => false,
+			'mediaId' => $dispatcher->argument('mediaId')
 			'action' => 'setLike',
 			'error' => $e->getMessage()
 		]);
@@ -112,11 +115,13 @@ else if($dispatcher->setFollow())
 		$status = $action->setFollow($dispatcher->argument('userId'));
 		$responses->set([
 			'status' => true,
+			'userId' => $dispatcher->argument('userId')
 			'action' => 'setFollow'
 		]);
 	} catch (Exception $e) {
 		$responses->set([
 			'status' => false,
+			'userId' => $dispatcher->argument('userId')
 			'action' => 'setFollow',
 			'error' => $e->getMessage()
 		]);
@@ -130,11 +135,13 @@ else if($dispatcher->unsetFollow())
 		$status = $action->unsetFollow($dispatcher->argument('userId'));
 		$responses->set([
 			'status' => true,
+			'userId' => $dispatcher->argument('userId')
 			'action' => 'unsetFollow'
 		]);
 	} catch (Exception $e) {
 		$responses->set([
 			'status' => false,
+			'userId' => $dispatcher->argument('userId')
 			'action' => 'unsetFollow',
 			'error' => $e->getMessage()
 		]);
