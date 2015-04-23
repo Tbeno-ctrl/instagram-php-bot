@@ -3,72 +3,57 @@
 namespace InstagramBot\Service\Response;
 
 use InstagramBot\Service\Dispatcher\Dispatcher;
-use InstagramBot\Repo\Cookies\Cookies;
+use InstagramBot\Repo\Responses\Responses;
 
 class Response implements ResponseInterface {
 
 	protected $dispatcher;
-	protected $action;
 	protected $response;
 
-	public function __construct(Dispatcher $dispatcher, $action, $status, $error = null)
+	public function __construct(Dispatcher $dispatcher, Responses $response)
 	{
 		$this->dispatcher = $dispatcher;
-		$this->action = $action;
-		$this->response = [
-			'action' => $this->action,
-			'username' => $this->dispatcher->argument('username'),
-			'status' => (bool) $status,
-			'action' => $action
-		];
-
-		if($error) {
-			$this->response['error'] = $error;
-		}
-
-		$this->getResponse();
+		$this->response = $response;
 	}
 
 	public function login()
 	{
-		return [
-		];
 	}
 
 	public function setLike()
 	{
-		return [
+		$this->response->set([
 			'mediaId' => $this->dispatcher->argument('mediaId')
-		];		
+		]);
 	}
 
 	public function setComment()
 	{
-		return [
+		$this->response->set([
 			'mediaId' => $this->dispatcher->argument('mediaId'),
 			'commentText' => $this->dispatcher->argument('commentText')
-		];	
+		]);
 	}
 
 	public function setFollow()
 	{
-		return [
+		$this->response->set([
 			'userId' => $this->dispatcher->argument('userId'),
-		];		
+		]);	
 	}
 
 	public function unsetFollow()
 	{
-		return [
+		$this->response->set([
 			'userId' => $this->dispatcher->argument('userId'),
-		];	
+		]);	
 	}
 
 	public function getResponse()
 	{
-		if(method_exists($this, $this->action))
+		if(method_exists($this, $this->response->get('action')))
 		{
-			return array_merge($this->response, $this->{$this->action}());
+			return $this->response->all();
 		}
 		else
 		{

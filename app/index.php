@@ -47,6 +47,13 @@ $client = new GuzzleHttp\Client;
 $cookies = new InstagramBot\Repo\Cookies\Cookies($cookies);
 $headers = new InstagramBot\Repo\Headers\Headers($headers);
 
+$responses = new InstagramBot\Repo\Responses\Responses;
+$response = new InstagramBot\Service\Response\Response($dispatcher, $responses);
+
+$responses->set([
+	'username' => $dispatcher->argument('username')
+]);
+
 if($dispatcher->login())
 {
 	$auth = new InstagramBot\Service\Auth\InstagramAuth($client, $cookies, $headers);
@@ -55,40 +62,74 @@ if($dispatcher->login())
 }
 else
 {
-	throw new Exception("username / password is not provided");
+	$responses->set([
+		'status' => false,
+		'action' => 'login'
+	]);
+	echo $response; die;
 }
 
 if($dispatcher->setComment())
 {
-	$status = $action->setComment($dispatcher->argument('mediaId'), $dispatcher->argument('commentText'));
-	$action = 'setComment';
+	try {
+		$status = $action->setComment($dispatcher->argument('mediaId'), $dispatcher->argument('commentText'));
+	} catch (Exception $e) {
+		$responses->set([
+			'status' => false,
+			'action' => 'setComment',
+			'error' => $e->getMessage()
+		]);
+		echo $response;
+	}
 }
 
 else if($dispatcher->setLike())
 {
-	$status = $action->setLike($dispatcher->argument('mediaId'));
-	$action = 'setLike';
+	try {
+		$status = $action->setLike($dispatcher->argument('mediaId'));
+	} catch (Exception $e) {
+		$responses->set([
+			'status' => false,
+			'action' => 'setLike',
+			'error' => $e->getMessage()
+		]);
+		echo $response;
+	}
 }
 
 else if($dispatcher->setFollow())
 {
-	$status = $action->setFollow($dispatcher->argument('userId'));
-	$action = 'setFollow';
+	try {
+		$status = $action->setFollow($dispatcher->argument('userId'));
+	} catch (Exception $e) {
+		$responses->set([
+			'status' => false,
+			'action' => 'setFollow',
+			'error' => $e->getMessage()
+		]);
+		echo $response;
+	}
 }
 
 else if($dispatcher->unsetFollow())
 {
-	$status = $action->unsetFollow($dispatcher->argument('userId'));
-	$action = 'unsetFollow';
+	try {
+		$status = $action->unsetFollow($dispatcher->argument('userId'));
+	} catch (Exception $e) {
+		$responses->set([
+			'status' => false,
+			'action' => 'unsetFollow',
+			'error' => $e->getMessage()
+		]);
+		echo $response;
+	}
 }
 
 else
 {
-	$status = true;
-	$action = 'login';
-}
-
-if(isset($status) && isset($action))
-{
-	echo new InstagramBot\Service\Response\Response($dispatcher, $action, $status);
+	$responses->set([
+		'status' => true,
+		'action' => 'login'
+	]);
+	echo $response;
 }

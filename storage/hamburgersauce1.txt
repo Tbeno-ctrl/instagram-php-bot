@@ -1,1 +1,0 @@
-[{"Name":"mid","Value":"VTjW5gAEAAG2pZrKfhC1N8cn5m3I","Domain":"instagram.com","Path":"\/","Max-Age":"630720000","Expires":2060508390,"Secure":false,"Discard":false,"HttpOnly":false},{"Name":"csrftoken","Value":"3b01dd6133fa19adac8e58ac59a572f5","Domain":"instagram.com","Path":"\/","Max-Age":"31449600","Expires":1461238193,"Secure":false,"Discard":false,"HttpOnly":false}]
