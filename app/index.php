@@ -51,7 +51,8 @@ $responses = new InstagramBot\Repo\Responses\Responses;
 $response = new InstagramBot\Service\Response\Response($dispatcher, $responses);
 
 $responses->set([
-	'username' => $dispatcher->argument('username')
+	'username' => $dispatcher->argument('username'),
+	'mediaId' => $dispatcher->argument('mediaId')
 ]);
 
 if($dispatcher->login())
