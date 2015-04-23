@@ -73,56 +73,73 @@ if($dispatcher->setComment())
 {
 	try {
 		$status = $action->setComment($dispatcher->argument('mediaId'), $dispatcher->argument('commentText'));
+		$responses->set([
+			'status' => true,
+			'action' => 'setComment'
+		]);
 	} catch (Exception $e) {
 		$responses->set([
 			'status' => false,
 			'action' => 'setComment',
 			'error' => $e->getMessage()
 		]);
-		echo $response;
 	}
+	echo $response;
 }
 
 else if($dispatcher->setLike())
 {
 	try {
 		$status = $action->setLike($dispatcher->argument('mediaId'));
+		$responses->set([
+			'status' => true,
+			'action' => 'setLike'
+		]);
 	} catch (Exception $e) {
 		$responses->set([
 			'status' => false,
 			'action' => 'setLike',
 			'error' => $e->getMessage()
 		]);
-		echo $response;
 	}
+	echo $response;
 }
 
 else if($dispatcher->setFollow())
 {
 	try {
 		$status = $action->setFollow($dispatcher->argument('userId'));
+		$responses->set([
+			'status' => true,
+			'action' => 'setFollow'
+		]);
 	} catch (Exception $e) {
 		$responses->set([
 			'status' => false,
 			'action' => 'setFollow',
 			'error' => $e->getMessage()
 		]);
-		echo $response;
 	}
+	echo $response;
 }
 
 else if($dispatcher->unsetFollow())
 {
 	try {
 		$status = $action->unsetFollow($dispatcher->argument('userId'));
+		$responses->set([
+			'status' => true,
+			'action' => 'unsetFollow'
+		]);
 	} catch (Exception $e) {
 		$responses->set([
 			'status' => false,
 			'action' => 'unsetFollow',
 			'error' => $e->getMessage()
 		]);
-		echo $response;
 	}
+
+	echo $response;
 }
 
 else
