@@ -35,8 +35,8 @@ $dispatcher = new InstagramBot\Service\Dispatcher\Dispatcher($arguments);
 
 $storageFile = __DIR__ . "/../storage/{$dispatcher->argument('username')}.txt";
 
-//remove cookies file if update date > 1 hour
-if((time() - filectime($storageFile)) > 60 * 60) 
+//remove cookies file if update date > 1
+if(file_exists($storageFile) && (time() - filectime($storageFile)) > 60 * 60) 
 {
 	unlink($storageFile);
 }

@@ -11,7 +11,7 @@ class Response implements ResponseInterface {
 	protected $action;
 	protected $response;
 
-	public function __construct(Dispatcher $dispatcher, $action, $status)
+	public function __construct(Dispatcher $dispatcher, $action, $status, $error = null)
 	{
 		$this->dispatcher = $dispatcher;
 		$this->action = $action;
@@ -21,6 +21,10 @@ class Response implements ResponseInterface {
 			'status' => (bool) $status,
 			'action' => $action
 		];
+
+		if($error) {
+			$this->response['error'] = $error;
+		}
 
 		$this->getResponse();
 	}
