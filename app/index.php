@@ -1,37 +1,8 @@
 <?php 
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/config.php';
 
-ini_set('display_errors',1);
-ini_set('display_startup_errors',1);
-error_reporting(-1);
-
-$headers = [
-	'Origin' => 'https://instagram.com',
-	'Accept-Encoding' => 'gzip, deflate',
-	'Accept-Language' => 'en-US,en;q=0.8,ru;q=0.6,pl;q=0.4',
-	'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.118 Safari/537.36',
-	'Content-Type' => 'application/x-www-form-urlencoded',
-	'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-	'Cache-Control' => 'max-age=0',
-	'Referer' => 'https://instagram.com/accounts/login/',
-	'Connection' => 'keep-alive'
-];
-
-$arguments = getopt('', [
-	'username:', 
-	'password:', 
-	'mediaId::', 
-	'userId::', 
-	'commentText::',
-	'setLike::',
-	'setFollow::',
-	'unsetFollow::',
-	'setComment::',
-	'cookies::',
-	'ip::',
-	'userAgent::'
-]);
-$dispatcher = new InstagramBot\Service\Dispatcher\Dispatcher($arguments);
+$dispatcher = new InstagramBot\Service\Dispatcher\Dispatcher($_GET);
 
 $storageFile = __DIR__ . "/../storage/{$dispatcher->argument('username')}.txt";
 
@@ -42,11 +13,9 @@ if(file_exists($storageFile) && (time() - filectime($storageFile)) > 60 * 60)
 }
 
 $cookies = new GuzzleHttp\Cookie\FileCookieJar($storageFile);
-
 $client = new GuzzleHttp\Client;
 $cookies = new InstagramBot\Repo\Cookies\Cookies($cookies);
 $headers = new InstagramBot\Repo\Headers\Headers($headers);
-
 $responses = new InstagramBot\Repo\Responses\Responses;
 $response = new InstagramBot\Service\Response\Response($dispatcher, $responses);
 
